@@ -4,4 +4,3 @@ Get tem,hum,IR-tem and broadcast them.
 nrf52840,mlx90614,sht31.
 ### SDK Version
 nRF5_SDK_17.0.2_d674dde
-
