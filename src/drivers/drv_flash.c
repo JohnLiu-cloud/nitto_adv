@@ -15,7 +15,7 @@
 #endif
 #include "drv_flash.h"
 
-#define FLASH_UNIT_SIZE 4
+#define FLASH_UNIT_SIZE 6
 
 static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt);
 
@@ -131,7 +131,7 @@ void fstorage_init( void )
     (void) nrf5_flash_end_addr_get();
 }
 
-void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id )
+void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id , uint16_t interval )
 {
     ret_code_t rc;
     uint8_t w_data[FLASH_UNIT_SIZE];
@@ -139,6 +139,8 @@ void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id )
     w_data[1] = mode;
     w_data[2] = (uint8_t)(id>>8);
     w_data[3] = (uint8_t)id;
+    w_data[4] = (uint8_t)(interval>>8);
+    w_data[5] = (uint8_t)interval;
 
     rc = nrf_fstorage_erase(&fstorage, 0x3e000,1, NULL);
     APP_ERROR_CHECK(rc);
@@ -152,7 +154,7 @@ void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id )
     NRF_LOG_INFO("Done.");
 }
 
-void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id )
+void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id , uint16_t *interval )
 {
   ret_code_t rc;
   uint8_t r_data[4];
@@ -175,5 +177,7 @@ void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id )
       *mode = 0;   
     }
     *id = (uint16_t)(r_data[2]<<8) + (uint16_t)r_data[3];
+
+    *interval = (uint16_t)(r_data[4]<<8) + (uint16_t)r_data[5]; 
 
 }

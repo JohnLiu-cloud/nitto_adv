@@ -25,6 +25,8 @@ BLE_ADVERTISING_DEF(m_advertising);                                             
 
 uint16_t g_company_id = 0xffff;
 
+uint16_t g_adv_interval = APP_ADV_INTERVAL;
+
 sou_data_t sou_data;
 
 adv_data_t adv_data;
@@ -161,6 +163,8 @@ void advertising_init(void)
     sou_data.mac[4] = ((NRF_FICR->DEVICEADDR[1]>> 0) & 0xff);
     sou_data.mac[5] = ((NRF_FICR->DEVICEADDR[1]>> 8) & 0xff);
 
+    NRF_LOG_INFO("MAC %02x:%02x:%02x:%02x:%02x:%02x",sou_data.mac[0],sou_data.mac[1],sou_data.mac[2],sou_data.mac[3],sou_data.mac[4],sou_data.mac[5]);
+
     memset(&init, 0, sizeof(init));
 
     init.advdata.name_type          = BLE_ADVDATA_NO_NAME;
@@ -171,7 +175,7 @@ void advertising_init(void)
     init.advdata.p_manuf_specific_data = &manuf_specific_data;
 
     init.config.ble_adv_fast_enabled  = true;
-    init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
+    init.config.ble_adv_fast_interval = g_adv_interval;
     init.config.ble_adv_fast_timeout  = 0;
     init.evt_handler = on_adv_evt;
 

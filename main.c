@@ -186,6 +186,10 @@ static void timer_timeout_handler(void * p_context)
 
     drv_mlx_get_tem( &sen_data.Item[times] );
 
+    nrf_delay_ms(10);
+
+    drv_mlx_read_emissivity();
+
     nrf_delay_ms(20);
 
     drv_sht_get_TemHum( &sen_data.tem[times] , &sen_data.hum[times] );  
@@ -426,7 +430,7 @@ static void exe_fstorage_write(void)
     if( m_fst_write )
     {
       m_fst_write = false;
-      fstorage_write( sou_data.sn , sou_data.mode , g_company_id );
+      fstorage_write( sou_data.sn , sou_data.mode , g_company_id , g_adv_interval );
       nus_data_response( NI_CMD_FLASH , 0 , NULL , 0 );
     }
 }
@@ -489,6 +493,11 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
             case NI_CMD_ID:
               NRF_LOG_INFO("NI_CMD_ID");
               g_company_id = (uint16_t)(p_evt->params.rx_data.p_data[4]<<8) + (uint16_t)p_evt->params.rx_data.p_data[5];
+              nus_data_response( cmd , 0 , NULL , 0 );
+            break;
+            case NI_CMD_ADV:
+              NRF_LOG_INFO("NI_CMD_ADV");
+              g_adv_interval = (uint16_t)(p_evt->params.rx_data.p_data[4]<<8) + (uint16_t)p_evt->params.rx_data.p_data[5];
               nus_data_response( cmd , 0 , NULL , 0 );
             break;
             default:
@@ -927,6 +936,8 @@ static void idle_state_handle(void)
 int main(void)
 {
     bool erase_bonds;
+
+    ret_code_t err_code;
     // Initialize.
     //uart_init();
     sou_data.ver = NI_VER;
@@ -954,7 +965,12 @@ int main(void)
 #endif
     fstorage_init();
 
-    fstorage_read( &sou_data.sn , &sou_data.mode , &g_company_id );
+    fstorage_read( &sou_data.sn , &sou_data.mode , &g_company_id , &g_adv_interval );
+
+    int8_t txpower;
+    txpower = 0;
+    err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, BLE_GAP_TX_POWER_ROLE_ADV, txpower);
+    APP_ERROR_CHECK(err_code);
 
     power_management_init();
     ble_stack_init();

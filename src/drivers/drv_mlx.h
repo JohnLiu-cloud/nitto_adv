@@ -17,4 +17,6 @@ void drv_mlx_get_tem( float *tem);
 *
 */
 void drv_mlx_sleepMode(void);
+
+void drv_mlx_read_emissivity(void);
 #endif //DRV_MLX_H

@@ -27,7 +27,8 @@ typedef enum{
   NI_CMD_FLASH,
   NI_CMD_FACTORY_TEST,
   NI_CMD_MAC,
-  NI_CMD_ID
+  NI_CMD_ID,
+  NI_CMD_ADV
 }ni_cmd_t;
 
 typedef struct{
@@ -66,6 +67,8 @@ typedef struct{
 extern uint16_t g_normal;
 
 extern uint16_t g_company_id;
+
+extern uint16_t g_adv_interval;
 
 extern sou_data_t sou_data;
 

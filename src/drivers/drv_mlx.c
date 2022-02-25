@@ -86,3 +86,25 @@ void drv_mlx_sleepMode(void)
   twi_write_data(JES_TWI_MLX_ENABLED,buff,2);
 }
 
+void drv_mlx_read_emissivity(void)
+{
+    uint8_t cmd;
+    uint8_t buff[4];
+    uint8_t arr[6];
+    uint8_t PecReg;
+    float mlx_temp;
+    cmd = 0X04|0X20;
+    twi_write_addr( JES_TWI_MLX_ENABLED , cmd , 1 );
+    twi_read_data( JES_TWI_MLX_ENABLED , buff , 3 );
+
+    arr[0] = (JES_MLX_ADDR<<1);        
+    arr[1] = cmd;
+    arr[2] = (JES_MLX_ADDR<<1)+1;         //Load array arr
+    arr[3] = buff[0];  //DataL       
+    arr[4] = buff[1];                                     
+    PecReg=PEC_Calculation(arr,5);     //Calculate CRC
+
+
+
+    NRF_LOG_INFO("emissivity=0x%02x%02x.",arr[3],arr[4]);
+}
