@@ -1,6 +1,8 @@
 #include "drv_twi.h"
 #include "drv_sht.h"
 #include "adv.h"
+#include "stdlib.h"
+
 #include "nrf_log.h"
 
 #define SHT_CMD_STATE 0X2C06
@@ -29,6 +31,8 @@ void drv_sht_get_TemHum( float *p_tem , float *p_hum )
   tem = ((buff[0]<<8) | buff[1]);
 
   hum = ((buff[3]<<8) | buff[4]);
+  
+  NRF_LOG_INFO("tem 0x%02x 0x%02x",buff[0],buff[1]);
 
   Temperature= (175.0*(float)tem/65535.0-45.0);
 
@@ -38,7 +42,6 @@ void drv_sht_get_TemHum( float *p_tem , float *p_hum )
 
   *p_hum = Humidity;
 
-  NRF_LOG_INFO("drv sht tem %d.%d",(uint8_t)(Temperature),((uint16_t)(Temperature*100))%100);
-
+  NRF_LOG_INFO("drv sht tem %d",(int16_t)(Temperature*100));
   NRF_LOG_INFO("drv sht hum %d.%d",(uint8_t)(Humidity),((uint16_t)(Humidity*100))%100);
 }

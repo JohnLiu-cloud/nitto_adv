@@ -4,6 +4,8 @@
 #include "adv.h"
 #include "nrf_delay.h"
 #include "nrf_log.h"
+#include "math.h"
+#include "stdlib.h"
 
 static uint8_t PEC_Calculation(uint8_t *dat , uint8_t len);
 
@@ -36,9 +38,10 @@ void drv_mlx_get_tem( float *tem)
       g_normal = 1<<STATE_MLX_NG;
     }
 
-    NRF_LOG_INFO("drv mlx %d.%d",(uint8_t)(mlx_temp),((uint16_t)(mlx_temp*100))%100);
-    //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "drv mlx %d.%d\r\n" , drv_mlx.temp[0] , drv_mlx.temp[1] );
-    NRF_LOG_INFO("PEC=[%02x][%02x]",buff[2],PecReg);
+    //NRF_LOG_INFO("[%02x][%02x]",buff[0],buff[1]);
+      NRF_LOG_INFO("IR tem %d",(int16_t)(mlx_temp*100));
+
+   // NRF_LOG_INFO("PEC=[%02x][%02x]",buff[2],PecReg);
 }
 
 

@@ -51,16 +51,16 @@ void adv_data_group(void)
   uint8_t adv[31];
 
   //temperature value
-  adv_data.tem[0] = (uint8_t)(((uint16_t)(sou_data.tem*100))>>8);
-  adv_data.tem[1] = (uint8_t)((uint16_t)(sou_data.tem*100));
+  adv_data.tem[0] = (int8_t)(((int16_t)(sou_data.tem*100))>>8);
+  adv_data.tem[1] = (int8_t)((int16_t)(sou_data.tem*100));
 
   //humidity value
   adv_data.hum[0] = (uint8_t)(((uint16_t)(sou_data.hum*100))>>8);
   adv_data.hum[1] = (uint8_t)((uint16_t)(sou_data.hum*100));
 
   //IR temperature value
-  adv_data.Item[0] = (uint8_t)(((uint16_t)(sou_data.Item*100))>>8);
-  adv_data.Item[1] = (uint8_t)((uint16_t)(sou_data.Item*100));
+  adv_data.Item[0] = (int8_t)(((int16_t)(sou_data.Item*100))>>8);
+  adv_data.Item[1] = (int8_t)((int16_t)(sou_data.Item*100));
 
   //battery level
   adv_data.other = sou_data.bat;
