@@ -13,9 +13,10 @@
 #include "nrf_drv_clock.h"
 #include "nrf_fstorage_nvmc.h"
 #endif
+#include "adv.h"
 #include "drv_flash.h"
 
-#define FLASH_UNIT_SIZE 6
+#define FLASH_UNIT_SIZE 8
 
 static void fstorage_evt_handler(nrf_fstorage_evt_t * p_evt);
 
@@ -141,12 +142,15 @@ void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id , uint16_t interval
     w_data[3] = (uint8_t)id;
     w_data[4] = (uint8_t)(interval>>8);
     w_data[5] = (uint8_t)interval;
+    w_data[6] = 0xff;
+    w_data[7] = 0xff;
 
     rc = nrf_fstorage_erase(&fstorage, 0x3e000,1, NULL);
     APP_ERROR_CHECK(rc);
     wait_for_flash_ready(&fstorage);
     /* Let's write to flash. */
-    NRF_LOG_INFO("Writing \"%d,%d\" to flash.", w_data[0],w_data[1] );
+    NRF_LOG_INFO("Writing flash.");
+    NRF_LOG_HEXDUMP_INFO(w_data,FLASH_UNIT_SIZE);
     rc = nrf_fstorage_write(&fstorage, 0x3e000, &w_data, FLASH_UNIT_SIZE, NULL);
     APP_ERROR_CHECK(rc);
 
@@ -157,7 +161,7 @@ void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id , uint16_t interval
 void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id , uint16_t *interval )
 {
   ret_code_t rc;
-  uint8_t r_data[4];
+  uint8_t r_data[FLASH_UNIT_SIZE];
     /* Read data. */
     rc = nrf_fstorage_read(&fstorage, 0x3e000, r_data, FLASH_UNIT_SIZE );
     if (rc != NRF_SUCCESS)
@@ -165,7 +169,8 @@ void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id , uint16_t *inter
       NRF_LOG_ERROR("fstorage read err=%s.",nrf_strerror_get(rc));
       return;
     }
-    NRF_LOG_INFO("read \"0x%02x,0x%02x\" in flash.", r_data[0],r_data[1] );
+    NRF_LOG_INFO("read flash.");
+    NRF_LOG_HEXDUMP_INFO(r_data,FLASH_UNIT_SIZE);
     if(  r_data[0] != 0xff &&  r_data[1] != 0xff )
     {
       *sn = r_data[0];
@@ -179,5 +184,10 @@ void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id , uint16_t *inter
     *id = (uint16_t)(r_data[2]<<8) + (uint16_t)r_data[3];
 
     *interval = (uint16_t)(r_data[4]<<8) + (uint16_t)r_data[5]; 
+
+    if( *interval == 0 || *interval == 0xffff )
+    {
+      *interval = APP_ADV_INTERVAL;
+    }
 
 }

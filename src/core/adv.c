@@ -37,6 +37,8 @@ uint8_t g_adv_info[ADV_INFO_LEN];
 
 uint16_t g_normal = 0;
 
+uint16_t m_adv_handle;
+
 void adv_struct_fun( ble_advertising_t *p_adv )
 {
   p_adv = &m_advertising;
@@ -183,6 +185,8 @@ void advertising_init(void)
     APP_ERROR_CHECK(err_code);
 
     ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
+
+    m_adv_handle = m_advertising.adv_handle;
 }
 
 

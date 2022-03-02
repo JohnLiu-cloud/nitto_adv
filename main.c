@@ -967,11 +967,6 @@ int main(void)
 
     fstorage_read( &sou_data.sn , &sou_data.mode , &g_company_id , &g_adv_interval );
 
-    int8_t txpower;
-    txpower = 0;
-    err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, BLE_GAP_TX_POWER_ROLE_ADV, txpower);
-    APP_ERROR_CHECK(err_code);
-
     power_management_init();
     ble_stack_init();
     gap_params_init();
@@ -980,6 +975,14 @@ int main(void)
     dfu_services_init();
     advertising_init();
     conn_params_init();
+
+    int8_t txpower;
+    txpower = 0;
+    err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, m_adv_handle , txpower);
+    APP_ERROR_CHECK(err_code);
+
+    err_code = sd_power_dcdc_mode_set(NRF_POWER_DCDC_ENABLE);
+    APP_ERROR_CHECK(err_code);
     // Start execution.
     //printf("\r\nUART started.\r\n");
     NRF_LOG_INFO("nitto ble started.");

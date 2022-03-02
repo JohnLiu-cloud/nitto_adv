@@ -64,4 +64,9 @@ Output/Release/Obj/nitto_adv_s140/drv_flash.o: \
  ../../../../../../components/softdevice/s140/headers/ble_gatts.h \
  ../../../../../../components/libraries/fstorage/nrf_fstorage_sd.h \
  ../../../../../../components/libraries/fstorage/nrf_fstorage.h \
+ ../../../src/core/adv.h \
+ ../../../../../../components/ble/common/ble_advdata.h \
+ ../../../../../../components/ble/ble_advertising/ble_advertising.h \
+ ../../../../../../components/softdevice/s140/headers/ble_gap.h \
+ ../../../../../../components/softdevice/s140/headers/ble_gattc.h \
  D:\john.liu\ble\sdk\nRF5_SDK_17.0.2_d674dde\examples\nitto\nitto_adv_s140_new\src\drivers\drv_flash.h

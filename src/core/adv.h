@@ -76,6 +76,8 @@ extern adv_data_t adv_data;
 
 extern sen_data_t sen_data;
 
+extern uint16_t m_adv_handle;
+
 extern uint8_t g_adv_info[ADV_INFO_LEN];
 
 void adv_struct_fun( ble_advertising_t *p_adv );
@@ -99,4 +101,5 @@ void advertising_start(void);
 /**@brief Function to update advertising .
  */
 void advertising_update(void);
+
 #endif //ADV_H_
