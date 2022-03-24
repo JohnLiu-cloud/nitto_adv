@@ -930,7 +930,7 @@ static void idle_state_handle(void)
 
 
 
-#define NI_VER 1
+#define NI_VER 3
 /**@brief Application main function.
  */
 int main(void)
@@ -985,8 +985,8 @@ int main(void)
     APP_ERROR_CHECK(err_code);
     // Start execution.
     //printf("\r\nUART started.\r\n");
-    NRF_LOG_INFO("nitto ble started.");
     NRF_LOG_INFO("nitto id:0x%04x mode:%d sn:%d.",g_company_id,sou_data.mode,sou_data.sn);
+    NRF_LOG_INFO("nitto dfu file.");
 
     advertising_start();
     

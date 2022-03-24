@@ -35,7 +35,7 @@ static void saadc_callback(nrf_drv_saadc_evt_t const * p_event)
 
         drv_adc_average();
 
-        NRF_LOG_INFO("adc [%d]",m_batt_adc);
+        //NRF_LOG_INFO("adc [%d]",m_batt_adc);
         if(nrfx_saadc_is_busy()){
 //           NRF_LOG_INFO("adc abort!");
 //           nrf_drv_saadc_abort();

@@ -30,8 +30,8 @@ NRF_FSTORAGE_DEF(nrf_fstorage_t fstorage) =
      * You must set these manually, even at runtime, before nrf_fstorage_init() is called.
      * The function nrf5_flash_end_addr_get() can be used to retrieve the last address on the
      * last page of flash available to write data. */
-    .start_addr = 0x3e000,
-    .end_addr   = 0x3ffff,
+    .start_addr = 0xf5000,
+    .end_addr   = 0xf7fff,
 };
 
 /**@brief   Sleep until an event is received. */
@@ -123,7 +123,7 @@ void fstorage_init( void )
     rc = nrf_fstorage_init(&fstorage, p_fs_api, NULL);
     APP_ERROR_CHECK(rc);
 
-    print_flash_info(&fstorage);
+    //print_flash_info(&fstorage);
 
     /* It is possible to set the start and end addresses of an fstorage instance at runtime.
      * They can be set multiple times, should it be needed. The helper function below can
@@ -145,13 +145,13 @@ void fstorage_write( uint8_t sn , uint8_t mode , uint16_t id , uint16_t interval
     w_data[6] = 0xff;
     w_data[7] = 0xff;
 
-    rc = nrf_fstorage_erase(&fstorage, 0x3e000,1, NULL);
+    rc = nrf_fstorage_erase(&fstorage, 0xf5000,1, NULL);//f8000-3000
     APP_ERROR_CHECK(rc);
     wait_for_flash_ready(&fstorage);
     /* Let's write to flash. */
     NRF_LOG_INFO("Writing flash.");
     NRF_LOG_HEXDUMP_INFO(w_data,FLASH_UNIT_SIZE);
-    rc = nrf_fstorage_write(&fstorage, 0x3e000, &w_data, FLASH_UNIT_SIZE, NULL);
+    rc = nrf_fstorage_write(&fstorage, 0xf5000, &w_data, FLASH_UNIT_SIZE, NULL);
     APP_ERROR_CHECK(rc);
 
     wait_for_flash_ready(&fstorage);
@@ -163,13 +163,13 @@ void fstorage_read( uint8_t *sn , uint8_t *mode , uint16_t *id , uint16_t *inter
   ret_code_t rc;
   uint8_t r_data[FLASH_UNIT_SIZE];
     /* Read data. */
-    rc = nrf_fstorage_read(&fstorage, 0x3e000, r_data, FLASH_UNIT_SIZE );
+    rc = nrf_fstorage_read(&fstorage, 0xf5000, r_data, FLASH_UNIT_SIZE );
     if (rc != NRF_SUCCESS)
     {
       NRF_LOG_ERROR("fstorage read err=%s.",nrf_strerror_get(rc));
       return;
     }
-    NRF_LOG_INFO("read flash.");
+    //NRF_LOG_INFO("read flash.");
     NRF_LOG_HEXDUMP_INFO(r_data,FLASH_UNIT_SIZE);
     if(  r_data[0] != 0xff &&  r_data[1] != 0xff )
     {

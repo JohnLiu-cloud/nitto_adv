@@ -109,5 +109,5 @@ void drv_mlx_read_emissivity(void)
 
 
 
-    NRF_LOG_INFO("emissivity=0x%02x%02x.",arr[3],arr[4]);
+    //NRF_LOG_INFO("emissivity=0x%02x%02x.",arr[3],arr[4]);
 }

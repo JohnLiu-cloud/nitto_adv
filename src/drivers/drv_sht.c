@@ -32,7 +32,7 @@ void drv_sht_get_TemHum( float *p_tem , float *p_hum )
 
   hum = ((buff[3]<<8) | buff[4]);
   
-  NRF_LOG_INFO("tem 0x%02x 0x%02x",buff[0],buff[1]);
+  //NRF_LOG_INFO("tem 0x%02x 0x%02x",buff[0],buff[1]);
 
   Temperature= (175.0*(float)tem/65535.0-45.0);
 
