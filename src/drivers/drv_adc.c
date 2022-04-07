@@ -86,9 +86,9 @@ void drv_adc_average(void)
   static uint16_t accumulative_total = 0;
   static int sum = 0;
   int ave;
-  if( accumulative_total >= 60 ) {
+  if( accumulative_total >= 3 ) {
     accumulative_total = 0;
-    ave = sum/60;
+    ave = sum/3;
     sum = 0;
     NRF_LOG_INFO("drv_adc_average [%d]",ave);
     if( ave > BATT_LEVEL_80 ) {

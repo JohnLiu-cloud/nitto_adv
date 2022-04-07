@@ -82,9 +82,13 @@ extern uint8_t g_adv_info[ADV_INFO_LEN];
 
 void adv_struct_fun( ble_advertising_t *p_adv );
 
-/**@brief Function to advertising data group.
+/**@brief Function to update tem and hum data.
  */
-void adv_data_group(void);
+void adv_temHum_update(void);
+
+/**@brief Function to update other data.
+ */
+void adv_otherData_update(void);
 
 /**@brief Function manufacturer specific data .
  */

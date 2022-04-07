@@ -44,9 +44,9 @@ void adv_struct_fun( ble_advertising_t *p_adv )
   p_adv = &m_advertising;
 }
 
-/**@brief Function to advertising data group.
+/**@brief Function to update tem and hum data.
  */
-void adv_data_group(void)
+void adv_temHum_update(void)
 {
   uint8_t adv[31];
 
@@ -62,6 +62,17 @@ void adv_data_group(void)
   adv_data.Item[0] = (int8_t)(((int16_t)(sou_data.Item*100))>>8);
   adv_data.Item[1] = (int8_t)((int16_t)(sou_data.Item*100));
 
+
+  NRF_LOG_INFO("tem[%d.%d]hum[%d.%d]Item[%d.%d]", \
+                (uint8_t)(sou_data.tem),((uint16_t)(sou_data.tem*100))%100 , \
+                (uint8_t)(sou_data.hum),((uint16_t)(sou_data.hum*100))%100 , \
+                (uint8_t)(sou_data.Item),((uint16_t)(sou_data.Item*100))%100 );
+}
+
+/**@brief Function to update other data.
+ */
+void adv_otherData_update(void)
+{
   //battery level
   adv_data.other = sou_data.bat;
   //rssi level
@@ -90,11 +101,6 @@ void adv_data_group(void)
 
   //Device mode
   adv_data.mode = sou_data.mode;
-
-  NRF_LOG_INFO("tem[%d.%d]hum[%d.%d]Item[%d.%d]", \
-                (uint8_t)(sou_data.tem),((uint16_t)(sou_data.tem*100))%100 , \
-                (uint8_t)(sou_data.hum),((uint16_t)(sou_data.hum*100))%100 , \
-                (uint8_t)(sou_data.Item),((uint16_t)(sou_data.Item*100))%100 );
 }
 
 /**@brief Function manufacturer specific data .

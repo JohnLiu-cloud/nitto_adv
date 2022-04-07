@@ -103,6 +103,7 @@ static void timer_timeout_handler(void * p_context)
   float minItem,minTem,minHum;
   static uint16_t count = 0;
   static uint8_t times = 0;
+  static uint16_t tick=0;
   bool read = false;
 
   drv_adc_read();
@@ -269,24 +270,29 @@ static void timer_timeout_handler(void * p_context)
 
       times = 0;
 
-      adv_data_group();
+      adv_temHum_update();
 
-      if( m_conn_handle == BLE_CONN_HANDLE_INVALID )
-      {         
-        advertising_update();   
-      } 
-      else 
-      {
-        if( m_factory_test )
-        {
-          exe_factory_test();
-        }
-      }
     }
     read = false;
 
   }
 #endif
+  tick++;
+  if( tick%3 == 0 )
+  {
+    adv_otherData_update();
+    if( m_conn_handle == BLE_CONN_HANDLE_INVALID )
+    {         
+      advertising_update();   
+    } 
+    else 
+    {
+      if( m_factory_test )
+      {
+        exe_factory_test();
+      }
+    }
+  }
   led_enter_sleep();
   
   led_low_power();
